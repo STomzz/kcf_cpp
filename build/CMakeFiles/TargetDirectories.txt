@@ -1,0 +1,3 @@
+/workspace/STomzz/kcf/build/CMakeFiles/kcf.dir
+/workspace/STomzz/kcf/build/CMakeFiles/edit_cache.dir
+/workspace/STomzz/kcf/build/CMakeFiles/rebuild_cache.dir
