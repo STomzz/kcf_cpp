@@ -18,7 +18,8 @@ function build()
 
   cmake .. \
         -DCMAKE_CXX_COMPILER=g++ \
-        -DCMAKE_SKIP_RPATH=TRUE
+        -DCMAKE_SKIP_RPATH=TRUE \
+        -DCMAKE_BUILD_TYPE=Release
 
   if [ $? -ne 0 ];then
     echo "[ERROR] cmake error, Please check your environment!"

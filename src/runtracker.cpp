@@ -20,9 +20,8 @@ int main(int argc, char *argv[])
 		return -1;
 
 	bool HOG = true;
-	bool FIXEDWINDOW = false;
-	bool MULTISCALE = true;
-	bool SILENT = true;
+	bool FIXEDWINDOW = true;
+	bool MULTISCALE = false;
 	bool LAB = false;
 
 	for (int i = 0; i < argc; i++)
@@ -33,8 +32,6 @@ int main(int argc, char *argv[])
 			FIXEDWINDOW = true;
 		if (strcmp(argv[i], "singlescale") == 0)
 			MULTISCALE = false;
-		if (strcmp(argv[i], "show") == 0)
-			SILENT = false;
 		if (strcmp(argv[i], "lab") == 0)
 		{
 			LAB = true;
@@ -76,6 +73,7 @@ int main(int argc, char *argv[])
 
 	tracker.init(bbox_first, frame);
 
+	// 保存第一帧
 	rectangle(frame, bbox_first, cv::Scalar(0, 255, 0), 2);
 	if (!imwrite("../frame/first_frame.jpg", frame))
 	{
@@ -87,10 +85,22 @@ int main(int argc, char *argv[])
 	{
 		double t1 = getTickCount();
 		result = tracker.update(frame);
-		// rectangle(frame, Point(result.x, result.y), Point(result.x + result.width, result.y + result.height), Scalar(0, 255, 0), 2, 8);
+		// float current_pv = tracker.peak_value;
+		// // peak_value添加到图片
+		// string text = "peak_value : " + to_string(current_pv);
+		// int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+		// double fontScale = 1.0;
+		// Scalar color(0, 0, 255);
+		// int thickness = 2;
+		// Point org(30, 50);
+		// cv::putText(frame, text, org, fontFace, fontScale, color, thickness);
+
 		rectangle(frame, result, Scalar(0, 255, 0), 2);
-		imwrite("../frame/debug_frame.jpg", frame);
+
+		// 实时查看框
+		// imwrite("../frame/debug_frame.jpg", frame);
 		video_writer.write(frame);
+		// printf("peak_value : %f ", tracker.peak_value);
 
 		double t2 = getTickCount();
 		double process_time_ms = (t2 - t1) * 1000 / getTickFrequency();

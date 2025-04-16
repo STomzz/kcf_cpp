@@ -191,7 +191,7 @@ cv::Rect KCFTracker::update(cv::Mat image)
     float cx = _roi.x + _roi.width / 2.0f;
     float cy = _roi.y + _roi.height / 2.0f;
 
-    float peak_value;
+    // float peak_value;
     cv::Point2f res = detect(_tmpl, getFeatures(image, 0, 1.0f), peak_value);
 
     if (scale_step != 1)
