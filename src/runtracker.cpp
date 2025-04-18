@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <string>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -13,42 +14,54 @@
 using namespace std;
 using namespace cv;
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 
-	if (argc > 5)
+	if (argc < 7)
 		return -1;
+
+	// 参数解析
+	std::string inputPath = argv[1];
+	std::string resultsPath = argv[2];
+	cv::Rect bbox_first;
+	bbox_first.x = std::stoi(argv[3]);
+	bbox_first.y = std::stoi(argv[4]);
+	bbox_first.width = std::stoi(argv[5]);
+	bbox_first.height = std::stoi(argv[6]);
 
 	bool HOG = true;
 	bool FIXEDWINDOW = true;
 	bool MULTISCALE = false;
 	bool LAB = false;
 
-	for (int i = 0; i < argc; i++)
-	{
-		if (strcmp(argv[i], "hog") == 0)
-			HOG = true;
-		if (strcmp(argv[i], "fixed_window") == 0)
-			FIXEDWINDOW = true;
-		if (strcmp(argv[i], "singlescale") == 0)
-			MULTISCALE = false;
-		if (strcmp(argv[i], "lab") == 0)
-		{
-			LAB = true;
-			HOG = true;
-		}
-		if (strcmp(argv[i], "gray") == 0)
-			HOG = false;
-	}
+	int count_frame = 1;
+
+	// for (int i = 0; i < argc; i++)
+	// {
+	// 	if (strcmp(argv[i], "hog") == 0)
+	// 		HOG = true;
+	// 	if (strcmp(argv[i], "fixed_window") == 0)
+	// 		FIXEDWINDOW = true;
+	// 	if (strcmp(argv[i], "singlescale") == 0)
+	// 		MULTISCALE = false;
+	// 	if (strcmp(argv[i], "lab") == 0)
+	// 	{
+	// 		LAB = true;
+	// 		HOG = true;
+	// 	}
+	// 	if (strcmp(argv[i], "gray") == 0)
+	// 		HOG = false;
+	// }
 
 	// Create KCFTracker object
 	KCFTracker tracker(HOG, FIXEDWINDOW, MULTISCALE, LAB);
 
-	// Tracker results
+	// Tracker_kcf results
 	Rect result;
 
-	string inputPath = "../video/tv_tuanliu.mkv";
-	string resultsPath = "../video/output_video.mp4";
+	// string inputPath = "../video/tv_tuanliu.mkv";
+	// string resultsPath = "../video/output_video.mp4";
+	// Rect bbox_first = Rect(706, 679, 155, 141);
 
 	VideoCapture cap(inputPath);
 	if (!cap.isOpened())
@@ -69,7 +82,6 @@ int main(int argc, char *argv[])
 		cerr << "Error: Could not read the first frame." << endl;
 		return -1;
 	}
-	Rect bbox_first = Rect(706, 679, 155, 141);
 
 	tracker.init(bbox_first, frame);
 
@@ -85,20 +97,38 @@ int main(int argc, char *argv[])
 	{
 		double t1 = getTickCount();
 		result = tracker.update(frame);
-		// float current_pv = tracker.peak_value;
-		// // peak_value添加到图片
-		// string text = "peak_value : " + to_string(current_pv);
-		// int fontFace = cv::FONT_HERSHEY_SIMPLEX;
-		// double fontScale = 1.0;
-		// Scalar color(0, 0, 255);
-		// int thickness = 2;
-		// Point org(30, 50);
-		// cv::putText(frame, text, org, fontFace, fontScale, color, thickness);
+		float current_pv = tracker.peak_value;
+		static cv::Mat temp;
+		static cv::Rect temp_roi;
+
+		// 维护高得分帧
+		// if (current_pv > 0.75)
+		// {
+		// 	temp = frame;
+		// 	temp_roi = result;
+		// 	rectangle(frame, result, Scalar(0, 255, 0), 2);
+		// 	imwrite("../frame/temp_frame.jpg", frame);
+		// }
+		// 低于阈值重新初始化
+		// if (current_pv < 0.5 && !temp.empty())
+		// {
+		// 	printf("start KCF init \n");
+		// 	tracker.init(temp_roi, temp);
+		// }
+
+		// peak_value添加到图片
+		string text = "peak_value : " + to_string(current_pv) + " count : " + to_string(++count_frame) + " Rect(x,y,w,h) : " + to_string(result.x) + "," + to_string(result.y) + "," + to_string(result.width) + "," + to_string(result.height);
+		int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+		double fontScale = 1.0;
+		Scalar color(0, 0, 255);
+		int thickness = 2;
+		Point org(30, 50);
+		cv::putText(frame, text, org, fontFace, fontScale, color, thickness);
 
 		rectangle(frame, result, Scalar(0, 255, 0), 2);
 
 		// 实时查看框
-		// imwrite("../frame/debug_frame.jpg", frame);
+		imwrite("../frame/debug_frame.jpg", frame);
 		video_writer.write(frame);
 		// printf("peak_value : %f ", tracker.peak_value);
 

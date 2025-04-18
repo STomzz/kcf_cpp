@@ -1,6 +1,6 @@
 /*
 
-Tracker based on Kernelized Correlation Filter (KCF) [1] and Circulant Structure with Kernels (CSK) [2].
+Tracker_kcf based on Kernelized Correlation Filter (KCF) [1] and Circulant Structure with Kernels (CSK) [2].
 CSK is implemented by using raw gray level features, since it is a single-channel filter.
 KCF is implemented by using HOG features (the default), since it extends CSK to multiple channels.
 
@@ -82,13 +82,13 @@ the use of this software, even if advised of the possibility of such damage.
 
 #pragma once
 
-#include "tracker.h"
+#include "tracker_kcf.h"
 
 #ifndef _OPENCV_KCFTRACKER_HPP_
 #define _OPENCV_KCFTRACKER_HPP_
 #endif
 
-class KCFTracker : public Tracker
+class KCFTracker : public Tracker_kcf
 {
 public:
   // Constructor

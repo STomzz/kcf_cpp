@@ -246,7 +246,7 @@ CMakeFiles/KCF.dir/src/runtracker.cpp.o: \
  /usr/include/opencv4/opencv2/imgcodecs.hpp \
  /usr/include/opencv4/opencv2/videoio.hpp \
  /workspace/STomzz/KCFcpp/src/kcftracker.hpp \
- /workspace/STomzz/KCFcpp/src/tracker.h \
+ /workspace/STomzz/KCFcpp/src/tracker_kcf.h \
  /usr/include/opencv4/opencv2/opencv.hpp \
  /usr/include/opencv4/opencv2/calib3d.hpp \
  /usr/include/opencv4/opencv2/features2d.hpp \

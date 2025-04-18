@@ -1,7 +1,7 @@
 CMakeFiles/KCF.dir/src/kcftracker.cpp.o: \
  /workspace/STomzz/KCFcpp/src/kcftracker.cpp /usr/include/stdc-predef.h \
  /workspace/STomzz/KCFcpp/src/kcftracker.hpp \
- /workspace/STomzz/KCFcpp/src/tracker.h \
+ /workspace/STomzz/KCFcpp/src/tracker_kcf.h \
  /usr/include/opencv4/opencv2/opencv.hpp \
  /usr/include/opencv4/opencv2/opencv_modules.hpp \
  /usr/include/opencv4/opencv2/core.hpp \
